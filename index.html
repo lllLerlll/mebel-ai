@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Мебель AI — редактор контента для магазина «Рабочее место»</title>
+<style>
+:root{font-family:Arial,sans-serif;color:#181818;background:#f6f6f6}
+body{max-width:920px;margin:28px auto;padding:0 15px;line-height:1.5}
+header,main,footer{background:#fff;border:1px solid #d6d6d6;border-radius:10px;padding:20px;margin-bottom:15px}
+h1{margin-top:0} label{display:block;font-weight:bold;margin-bottom:7px}
+button,select{padding:11px;margin:8px 6px 8px 0;border:1px solid #999;border-radius:6px;font-size:15px}
+button{background:#222;color:#fff;cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}
+textarea{box-sizing:border-box;width:100%;min-height:240px;border:1px solid #999;border-radius:6px;padding:13px;font:15px/1.5 Arial,sans-serif}
+small,.muted{color:#555} .notice{padding:11px;background:#f1f1f1;border-left:4px solid #555;margin:12px 0}
+</style>
+<!-- УСТАНОВКА: вставьте сюда официальный код счетчика из личного кабинета Яндекс.Метрики. -->
+<script>
+  const METRIKA_ID = null; // Замените null на свой реальный числовой номер счетчика
+  function reportGoal(eventName) {
+    if (Number.isInteger(METRIKA_ID) && typeof window.ym === 'function') {
+      window.ym(METRIKA_ID, 'reachGoal', eventName);
+    } else {
+      console.info('Учебное локальное событие без передачи в Яндекс.Метрику:', eventName);
+    }
+  }
+</script>
+</head>
+<body>
+<header>
+  <h1>Мебель AI</h1>
+  <p>Тестовый интерфейс для сотрудников мебельного интернет-магазина «Рабочее место».</p>
+  <div class="notice"><strong>Это учебный демонстратор, а не подключённая нейросеть.</strong> Здесь показываются ранее полученные реальные ответы YandexGPT и GigaChat на один и тот же товар. Кнопка открытия черновика не означает новый запрос к модели.</div>
+</header>
+<main>
+  <h2>Редактор карточки стола «РМ-120»</h2>
+  <p><b>Проверенные входные данные:</b> столешница 120 × 60 см, высота 75 см, материал ЛДСП, цвет «светлый дуб». Наличие ящиков, кромка, гарантия, цена, устойчивость к царапинам и эргономические обещания не подтверждены.</p>
+  <label for="model">Выбрать источник ранее полученного текста</label>
+  <select id="model">
+    <option value="yandex">YandexGPT</option>
+    <option value="giga">GigaChat</option>
+  </select>
+  <button id="view">Открыть черновик</button>
+  <label for="editor">Черновик для редакторской проверки</label>
+  <textarea id="editor" placeholder="Нажмите «Открыть черновик»" spellcheck="true" disabled></textarea>
+  <label><input type="checkbox" id="review" disabled> Я проверил(а) все характеристики и удалил(а) неподтверждённые утверждения</label>
+  <button id="approve" disabled>Утвердить исправленный черновик</button>
+  <p id="status" role="status" aria-live="polite">Счётчик не подключен: события отражаются только в консоли до настройки Метрики.</p>
+  <p class="muted">События для отчёта: <code>ai_draft_view</code>, <code>ai_edit</code> и <code>ai_approve</code>. Минимально требуются первые и третье. Не вставляйте персональные данные покупателей.</p>
+</main>
+<footer><small>Практическое занятие №7, «Мебель AI» · Проверка контента обязательна. Здесь нет реальных заказов, оплаты и запросов к LLM.</small></footer>
+<script>
+  const drafts={
+    yandex:'Стол «РМ-120» с столешницей размером 120 × 60 см и высотой 75 см из ЛДСП цвета «светлый дуб» — удобный вариант для организации рабочего места.\nСтолешница имеет достаточную площадь, чтобы разместить тетради, учебники и канцелярские принадлежности. Конструкция, вероятно, включает ящики для документов и письменных принадлежностей.\nСтол вписывается в интерьер, не загромождая помещение, и может стать личным уголком для умственной и творческой деятельности.',
+    giga:'Письменный стол «РМ-120» — удобная база для домашней работы и учёбы.\nШирокая столешница размером 120 × 60 см дает достаточно места для ноутбука, монитора, учебников и письменных принадлежностей. Стандартная высота 75 см помогает поддерживать правильную осанку во время долгих занятий.\nПрямые линии и фактурная кромка делают модель универсальной: она легко впишется в современный или классический интерьер. Светлый дуб визуально расширяет пространство и добавляет комнате света.\nКорпус выполнен из ЛДСП — практичного материала, устойчивого к бытовым загрязнениям и простого в уходе.'
+  };
+  const editor=document.getElementById('editor'), review=document.getElementById('review'),approve=document.getElementById('approve'),status=document.getElementById('status');
+  let lastText='', edited=false, firedEdit=false;
+  document.getElementById('view').addEventListener('click',()=>{
+    editor.value=drafts[document.getElementById('model').value];
+    editor.disabled=false;review.disabled=false;review.checked=false;approve.disabled=true;
+    lastText=editor.value;edited=false;firedEdit=false;
+    status.textContent='Черновик открыт. Перед утверждением проверьте и исправьте неподтверждённые факты.';
+    reportGoal('ai_draft_view');
+  });
+  editor.addEventListener('input',()=>{
+    edited=editor.value.trim().length>0 && editor.value!==lastText;
+    approve.disabled=!(edited && review.checked);
+    if(edited&&!firedEdit){reportGoal('ai_edit');firedEdit=true;}
+  });
+  review.addEventListener('change',()=>{approve.disabled=!(edited&&review.checked);});
+  approve.addEventListener('click',()=>{
+    if(!edited||!review.checked)return;
+    reportGoal('ai_approve');status.textContent='Черновик утвержден в учебном интерфейсе; перед публикацией требуется фактическая проверка уполномоченным сотрудником.';
+    approve.disabled=true;
+  });
+</script>
+</body>
+</html>
