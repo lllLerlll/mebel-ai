@@ -14,19 +14,33 @@ button{background:#222;color:#fff;cursor:pointer}button:disabled{opacity:.45;cur
 textarea{box-sizing:border-box;width:100%;min-height:240px;border:1px solid #999;border-radius:6px;padding:13px;font:15px/1.5 Arial,sans-serif}
 small,.muted{color:#555} .notice{padding:11px;background:#f1f1f1;border-left:4px solid #555;margin:12px 0}
 </style>
-<!-- УСТАНОВКА: вставьте сюда официальный код счетчика из личного кабинета Яндекс.Метрики. -->
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+  m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+  (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+  ym(113875300, "init", {
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    webvisor: true
+  });
+</script>
+<!-- /Yandex.Metrika counter -->
 <script>
-  const METRIKA_ID = null; // Замените null на свой реальный числовой номер счетчика
+  const METRIKA_ID = 113875300;
   function reportGoal(eventName) {
     if (Number.isInteger(METRIKA_ID) && typeof window.ym === 'function') {
       window.ym(METRIKA_ID, 'reachGoal', eventName);
     } else {
-      console.info('Учебное локальное событие без передачи в Яндекс.Метрику:', eventName);
+      console.warn('Счётчик Метрики не загрузился, событие не передано:', eventName);
     }
   }
 </script>
 </head>
 <body>
+<noscript><div><img src="https://mc.yandex.ru/watch/113875300" style="position:absolute;left:-9999px" alt="" /></div></noscript>
 <header>
   <h1>Мебель AI</h1>
   <p>Тестовый интерфейс для сотрудников мебельного интернет-магазина «Рабочее место».</p>
@@ -45,8 +59,8 @@ small,.muted{color:#555} .notice{padding:11px;background:#f1f1f1;border-left:4px
   <textarea id="editor" placeholder="Нажмите «Открыть черновик»" spellcheck="true" disabled></textarea>
   <label><input type="checkbox" id="review" disabled> Я проверил(а) все характеристики и удалил(а) неподтверждённые утверждения</label>
   <button id="approve" disabled>Утвердить исправленный черновик</button>
-  <p id="status" role="status" aria-live="polite">Счётчик не подключен: события отражаются только в консоли до настройки Метрики.</p>
-  <p class="muted">События для отчёта: <code>ai_draft_view</code>, <code>ai_edit</code> и <code>ai_approve</code>. Минимально требуются первые и третье. Не вставляйте персональные данные покупателей.</p>
+  <p id="status" role="status" aria-live="polite">Черновик ещё не открыт.</p>
+  <p class="muted">События Яндекс.Метрики для отчёта: <code>ai_draft_view</code>, <code>ai_edit</code> и <code>ai_approve</code>. Минимально требуются первые и третье. Не вставляйте персональные данные покупателей.</p>
 </main>
 <footer><small>Практическое занятие №7, «Мебель AI» · Проверка контента обязательна. Здесь нет реальных заказов, оплаты и запросов к LLM.</small></footer>
 <script>
